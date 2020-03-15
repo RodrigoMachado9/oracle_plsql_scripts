@@ -69,11 +69,10 @@ END;
 
 /*number[5] ( dynamic insertion data )
   Inserir dados na tabela fornecedor em tempo e execução.  
-
 */
 
 DECLARE 
-      v_user NUMBER;
+      v_user VARCHAR2(10); 
       v_password NUMBER;
       v_number FORNECEDOR.N_FORNEC%TYPE;
       v_name FORNECEDOR.NOME%TYPE;
@@ -108,12 +107,13 @@ BEGIN
           SYS.DBMS_OUTPUT.PUT_LINE('registros inseridos com sucesso! usuário:' || v_user);
           COMMIT;
       ELSE
-        SYS.DBMS_OUTPUT.PUT_LINE('favor verificar as credenciais de entrada..' || v_user || 'e' || v_password || 'inválidos');
+        SYS.DBMS_OUTPUT.PUT_LINE('favor verificar as credenciais de entrada..' || v_user );
       END IF;
 END;
 
 
-/*number[06]
 
+
+/*number[06]
   alterar dados da tabela fornecedor em tempo de execução.
 */
