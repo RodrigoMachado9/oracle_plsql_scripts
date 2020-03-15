@@ -1,0 +1,119 @@
+SET SERVEROUTPUT ON
+SET VERIFY OFF 
+
+/* scripts l1 */ 
+
+/*number[01]
+  ajusta determinado salario;
+*/
+
+DECLARE
+  -- v_salario_minimo NUMBER := 1000;
+  v_salario NUMBER(7,2) := 950;
+  v_novo_salario NUMBER(7,2);
+
+BEGIN
+  v_novo_salario := (v_salario * 1.08);
+
+DBMS_OUTPUT.put_line('O valor do salario ajustado > ' || v_novo_salario);
+END;
+
+
+/*number[02]
+   converte determinado dolar para real - cambio_real = 4.86;
+*/
+
+DECLARE
+  v_dolar NUMBER := 45;
+  v_real FLOAT;
+  
+BEGIN
+  v_real := (v_dolar * 4.86); 
+
+DBMS_OUTPUT.put_line('O valor da conversao do dolar > ' || v_real);
+END;
+
+
+
+/*number[03]
+  atribuindo 8% a uma determinada variavel em tempo de execução
+*/
+
+DECLARE
+  v_number NUMBER;
+BEGIN 
+  v_number :='&v_number';
+  DBMS_OUTPUT.put_line('O valor> ' || (v_number * 1.08));
+END;
+
+
+
+/*number[04]
+  convertendo deteminado valor (dollar) para real 
+  considerando determinado cambio, em tempo de execução 
+  */
+  
+DECLARE
+  v_dollar FLOAT;
+  v_exchange FLOAT;
+BEGIN 
+  v_dollar:='&v_dollar';
+  v_exchange:='&v_cambio';
+
+  -- todo * create tract value exchange, check value_exchange  is - 1.90, else break script;
+
+  DBMS_OUTPUT.put_line('O valor em real será de> ' || (v_dollar * v_exchange));
+END;
+
+
+
+/*number[5] ( dynamic insertion data )
+  Inserir dados na tabela fornecedor em tempo e execução.  
+
+*/
+
+DECLARE 
+      v_user NUMBER;
+      v_password NUMBER;
+      v_number FORNECEDOR.N_FORNEC%TYPE;
+      v_name FORNECEDOR.NOME%TYPE;
+      v_address FORNECEDOR.ENDERECO%TYPE;
+      v_cpf FORNECEDOR.CPF%TYPE;
+      v_stars FORNECEDOR.ESTRELA%TYPE;
+      v_update_date FORNECEDOR.DT_ATUALIZA%TYPE;
+      v_sales FORNECEDOR.VENDA%TYPE;
+      v_commission FORNECEDOR.COMISSAO%TYPE;
+      v_profit FORNECEDOR.LUCRO%TYPE;
+      
+BEGIN
+      v_user:='&v_user';
+      v_password:='&v_password';
+
+      -- todo * create trial control
+      IF (v_user = 'rmachado' AND v_password = '1123581321') THEN
+          SYS.DBMS_OUTPUT.PUT_LINE('Starting to read and load data...');
+          v_number:= '&v_number';
+          v_name:= '&v_name';
+          v_address:= '&v_address';
+          v_cpf:= '&v_cpf';
+          v_stars:= '&v_stars';
+          v_update_date:= '&v_update_date';
+          v_sales:= '&v_sales';
+          v_commission:= '&v_commission';
+          v_profit :='&v_profit';
+          -- Inserindo dados os dados carregados dinamicamente.
+          SYS.DBMS_OUTPUT.PUT_LINE('Inserting data...');
+          INSERT INTO FORNECEDOR (NOME, N_FORNEC, ENDERECO, CPF, ESTRELA, DT_ATUALIZA, VENDA, COMISSAO, LUCRO) VALUES (v_name, v_number,
+                      v_address, v_cpf, v_stars,v_update_date,v_sales,v_commission,v_profit);
+          SYS.DBMS_OUTPUT.PUT_LINE('registros inseridos com sucesso! usuário:' || v_user);
+          COMMIT;
+      ELSE
+        SYS.DBMS_OUTPUT.PUT_LINE('favor verificar as credenciais de entrada..' || v_user || 'e' || v_password || 'inválidos');
+      END IF;
+END;
+
+
+/*number[06]
+
+  alterar dados da tabela fornecedor em tempo de execução.
+*/
