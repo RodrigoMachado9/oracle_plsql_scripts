@@ -119,6 +119,19 @@ END;
 
 
 
-/*number[06]
-  alterar dados da tabela fornecedor em tempo de execução.
+/*
+Criar um bloco PL-SQL para aumentar o valor das vendas em R$ 3000,00 
+de todos os fornecedores que tenham mais que 3 estrelas, 
+sendo que o valor de R$ 3000 deverá ser informado em tempo de execução.
 */
+
+DECLARE 
+  v_sales FORNECEDOR.VENDA%TYPE;
+BEGIN 
+  v_sales:='& TYPE_NEW_VALUE_SALE';
+  IF v_sales != 3000.00 THEN 
+    SYS.DBMS_OUTPUT.PUT_LINE('Invalid value');
+  ELSE 
+    UPDATE fornecedor SET VENDA = v_sales WHERE ESTRELA > '3';
+  END IF;
+END;
