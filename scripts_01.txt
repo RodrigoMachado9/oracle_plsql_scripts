@@ -90,7 +90,7 @@ BEGIN
 
       -- todo * create trial control
       IF (v_user = 'rmachado' AND v_password = '1123581321') THEN
-          SYS.DBMS_OUTPUT.PUT_LINE('Starting to read and load data...');
+          SYS.DBMS_OUTPUT.PUT_LINE('starting to read and load data...');
           v_number:= '&v_number';
           v_name:= '&v_name';
           v_address:= '&v_address';
@@ -112,10 +112,9 @@ BEGIN
 
 EXCEPTION
   WHEN OTHERS THEN
-    SYS.DBMS_OUTPUT.PUT_LINE('Error insert into fornecedor' || v_user );
+    SYS.DBMS_OUTPUT.PUT_LINE('Error insert' || v_user );
 
 END;
-
 
 
 
@@ -134,6 +133,9 @@ BEGIN
   ELSE 
     UPDATE fornecedor SET VENDA = v_sales WHERE ESTRELA > '3';
   END IF;
+EXCEPTION
+   WHEN OTHERS THEN 
+     SYS.DBMS_OUTPUT.PUT_LINE('invalid data type');
 END;
 
 
