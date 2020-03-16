@@ -25,3 +25,44 @@ END;
 
 
 
+
+
+/*
+ACESSAR TABELA FORNECEDOR, CUJO CÓDIGO DEVERÁ SER INFORMADO NA TELA E ALTERAR O VALOR DA COMISSÃO, NAS CONDIÇÕES ABAIXO.
+Criar um bloco PL-SQL para acessar, na tabela FORNECEDOR, o fornecedor informado na tela e executar as seguintes ações:
+Caso não encontre dar a mensagem ‘ FORNECEDOR NÃO INFORMADO’
+
+Caso encontre deverá fazer a seguinte atualização na comissão:
+
+Se as vendas forem maiores que 6000  a comissão deverá ser 15% do valor das vendas
+Caso contrário  a comissão deverá ser 5% do valor das vendas
+
+No final, dar uma mensagem do valor calculado da comissão.
+
+*/
+
+DECLARE 
+  v_cod_provider FORNECEDOR.N_FORNEC%TYPE;
+  v_has_cod FORNECEDOR.N_FORNEC%TYPE;
+  v_commission FORNECEDOR.COMISSAO%TYPE;
+  v_sales FORNECEDOR.VENDA%TYPE;
+  
+BEGIN 
+   v_cod_provider:='& TYPE_THE_COD_PROVIDER';
+   SELECT N_FORNEC, COMISSAO , VENDA INTO v_has_cod, v_commission , v_sales FROM fornecedor WHERE N_FORNEC = v_cod_provider;
+   IF v_has_cod = v_cod_provider THEN
+      SYS.DBMS_OUTPUT.PUT_LINE(' comission ' || v_commission );
+      SYS.DBMS_OUTPUT.PUT_LINE(' sales ' || v_sales);
+      IF v_sales > 6000 THEN
+          v_commission:= (v_sales * 0.15);
+          UPDATE fornecedor SET COMISSAO = v_commission WHERE N_FORNEC = v_cod_provider;
+      ELSE
+          v_commission:=(v_sales * 0.05);
+          UPDATE fornecedor SET COMISSAO = v_commission WHERE N_FORNEC = v_cod_provider;
+      END IF;
+   END IF;
+  SYS.DBMS_OUTPUT.PUT_LINE(' calculated commission amount' || v_commission);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      SYS.DBMS_OUTPUT.PUT_LINE( ' FORNECEDOR NÃO INFORMADO ' );
+END;
