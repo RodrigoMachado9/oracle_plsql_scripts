@@ -109,6 +109,11 @@ BEGIN
       ELSE
         SYS.DBMS_OUTPUT.PUT_LINE('favor verificar as credenciais de entrada..' || v_user );
       END IF;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    SYS.DBMS_OUTPUT.PUT_LINE('Error insert into fornecedor' || v_user );
+
 END;
 
 
