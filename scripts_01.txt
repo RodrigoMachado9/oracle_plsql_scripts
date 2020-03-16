@@ -135,3 +135,16 @@ BEGIN
     UPDATE fornecedor SET VENDA = v_sales WHERE ESTRELA > '3';
   END IF;
 END;
+
+
+
+/*
+Criar um bloco PL-SQL para excluir da tabela FORNECEDOR o novo fornecedor inserido quando da 
+execução do exercício nº 5. O código do fornecedor deverá ser informado em tempo de execução.
+*/
+DECLARE
+  v_cod_forn FORNECEDOR.N_FORNEC%TYPE;
+BEGIN
+   v_cod_forn:='& TYPE_N_FORNEC';
+   DELETE FROM fornecedor WHERE N_FORNEC = v_cod_forn;
+END;
