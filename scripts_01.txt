@@ -143,8 +143,18 @@ Criar um bloco PL-SQL para excluir da tabela FORNECEDOR o novo fornecedor inseri
 execução do exercício nº 5. O código do fornecedor deverá ser informado em tempo de execução.
 */
 DECLARE
-  v_cod_forn FORNECEDOR.N_FORNEC%TYPE;
-BEGIN
-   v_cod_forn:='& TYPE_N_FORNEC';
-   DELETE FROM fornecedor WHERE N_FORNEC = v_cod_forn;
+  v_cod_provider FORNECEDOR.N_FORNEC%TYPE;
+  v_has_cod FORNECEDOR.N_FORNEC%TYPE;
+BEGIN 
+   v_cod_provider:='& TYPE_THE_COD_PROVIDER';
+   SELECT N_FORNEC INTO v_has_cod FROM fornecedor WHERE N_FORNEC = v_cod_provider;
+   IF v_has_cod = v_cod_provider THEN
+      DELETE FROM fornecedor WHERE N_FORNEC = v_cod_provider;
+      SYS.DBMS_OUTPUT.PUT_LINE('the user has been deleted:  ' || v_has_cod );
+    END IF;
+EXCEPTION 
+     WHEN NO_DATA_FOUND THEN
+        SYS.DBMS_OUTPUT.PUT_LINE('invalid code');
+     WHEN OTHERS THEN 
+         SYS.DBMS_OUTPUT.PUT_LINE('invalid data type');
 END;
