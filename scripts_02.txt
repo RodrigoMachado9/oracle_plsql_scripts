@@ -1,0 +1,27 @@
+/*
+Criar um bloco PL-SQL para acessar um determinado fornecedor na tabela FORNECEDOR, 
+cujo código do fornecedor deverá ser informado em tempo de execução. 
+Apresente na tela o seu código, endereço e o valor de suas vendas.
+*/
+DECLARE
+  v_cod_provider FORNECEDOR.N_FORNEC%TYPE;
+  v_has_cod FORNECEDOR.N_FORNEC%TYPE;
+  v_address FORNECEDOR.ENDERECO%TYPE;
+  v_sales   FORNECEDOR.VENDA%TYPE;
+BEGIN 
+   v_cod_provider:='& TYPE_THE_COD_PROVIDER';
+   SELECT N_FORNEC INTO v_has_cod FROM fornecedor WHERE N_FORNEC = v_cod_provider;
+   IF v_has_cod = v_cod_provider THEN
+        SELECT ENDERECO, VENDA INTO v_address, v_sales FROM fornecedor WHERE N_FORNEC = v_cod_provider;         
+        SYS.DBMS_OUTPUT.PUT_LINE('The supplier,s address >>' || v_address );
+        SYS.DBMS_OUTPUT.PUT_LINE('The value of sales >>' || v_sales );
+    END IF;
+EXCEPTION 
+     WHEN NO_DATA_FOUND THEN
+        SYS.DBMS_OUTPUT.PUT_LINE('invalid code');
+     WHEN OTHERS THEN 
+         SYS.DBMS_OUTPUT.PUT_LINE('invalid data type');
+END;
+
+
+
