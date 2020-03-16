@@ -85,29 +85,30 @@ DECLARE
       v_profit FORNECEDOR.LUCRO%TYPE;
       
 BEGIN
-      v_user:='&v_user';
-      v_password:='&v_password';
+      v_user:='& TYPE_YOUR_USER';
+      v_password:='& TYPE_YOUR_PASSWORD';
 
       -- todo * create trial control
       IF (v_user = 'rmachado' AND v_password = '1123581321') THEN
           SYS.DBMS_OUTPUT.PUT_LINE('starting to read and load data...');
-          v_number:= '&v_number';
-          v_name:= '&v_name';
-          v_address:= '&v_address';
-          v_cpf:= '&v_cpf';
-          v_stars:= '&v_stars';
-          v_update_date:= '&v_update_date';
+          v_number:= '& NUMBER';
+          v_name:= '& NAME';
+          v_address:= '& ADDRESS';
+          v_cpf:= '& CPF';
+          v_stars:= '&  STARS';
+          v_update_date:= '&  UPDATE_DATE';
           v_sales:= '&v_sales';
-          v_commission:= '&v_commission';
-          v_profit :='&v_profit';
+          v_commission:= '& COMMISSION';
+          v_profit :='& PROFIT';
           -- Inserindo dados os dados carregados dinamicamente.
           SYS.DBMS_OUTPUT.PUT_LINE('Inserting data...');
           INSERT INTO FORNECEDOR (NOME, N_FORNEC, ENDERECO, CPF, ESTRELA, DT_ATUALIZA, VENDA, COMISSAO, LUCRO) VALUES (v_name, v_number,
                       v_address, v_cpf, v_stars,v_update_date,v_sales,v_commission,v_profit);
-          SYS.DBMS_OUTPUT.PUT_LINE('registros inseridos com sucesso! usuário:' || v_user);
+          SYS.DBMS_OUTPUT.PUT_LINE('records inserted successfully : user' || v_user);
           COMMIT;
       ELSE
-        SYS.DBMS_OUTPUT.PUT_LINE('favor verificar as credenciais de entrada..' || v_user );
+        SYS.DBMS_OUTPUT.PUT_LINE('please, check the login credentials...' || v_user );
+        
       END IF;
 
 EXCEPTION
@@ -117,8 +118,7 @@ EXCEPTION
 END;
 
 
-
-/*
+/*number[6]
 Criar um bloco PL-SQL para aumentar o valor das vendas em R$ 3000,00 
 de todos os fornecedores que tenham mais que 3 estrelas, 
 sendo que o valor de R$ 3000 deverá ser informado em tempo de execução.
@@ -140,7 +140,7 @@ END;
 
 
 
-/*
+/*number[7]
 Criar um bloco PL-SQL para excluir da tabela FORNECEDOR o novo fornecedor inserido quando da 
 execução do exercício nº 5. O código do fornecedor deverá ser informado em tempo de execução.
 */
