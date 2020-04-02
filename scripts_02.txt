@@ -66,3 +66,37 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
       SYS.DBMS_OUTPUT.PUT_LINE( ' FORNECEDOR NÃO INFORMADO ' );
 END;
+
+
+
+
+
+/*
+Acessar a tabela “CONTA” pesquisando registro e em função do resultado da pesquisa, inserir nova linha na tabela A_FAZER.
+*/
+/*
+Criar um bloco PL-SQL para recuperar, na tabela CONTA, 
+o numero da conta com saldo 
+inferior a R$ 10.000 em uma variável e caso encontre um registro, 
+
+inserir na tabela A_FAZER uma nova tarefa nos campos abaixo:
+FEITO = ‘N’
+DATA = data do sistema
+OBSERV = ‘Mensagem para CC nº xxxx – saldo baixo’
+*/
+
+
+DECLARE 
+  v_data_system DATE := trunc(SYSDATE);
+  CURSOR account IS SELECT  * FROM conta WHERE SALDO < 10000;
+BEGIN 
+      FOR column_value in account
+      LOOP
+          INSERT INTO A_FAZER(FEITO, DATA, OBSERV) VALUES('N', v_data_system, 'Mensagem para CC n - '|| column_value.n_conta ||' - ' ||'saldo:  '||column_value.saldo);
+      END LOOP;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        SYS.DBMS_OUTPUT.PUT_LINE( ' << number account not exists >> ');
+    WHEN TOO_MANY_ROWS THEN 
+        SYS.DBMS_OUTPUT.PUT_LINE( '<< errors >>');        
+END;
