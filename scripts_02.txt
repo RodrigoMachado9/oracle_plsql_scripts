@@ -100,3 +100,72 @@ EXCEPTION
     WHEN TOO_MANY_ROWS THEN 
         SYS.DBMS_OUTPUT.PUT_LINE( '<< errors >>');        
 END;
+
+
+
+
+
+/*
+Criar um bloco PL/SQL para atualizar um campo 
+numa tabela de acordo com o resultado de uma pesquisa feita no registro dessa tabela. 
+Antes de criar o bloco para atualização dos dados, execute os comandos abaixo para criação e inserção de dados na tabela ALUNO.
+*/
+
+/*Criar uma tabela conforme segue:
+CREATE TABLE ALUNO 
+( RA NUMBER(9) PRIMARY KEY,  NOME VARCHAR(50) NOT NULL, 
+  DISCIPLINA VARCHAR(30),  MEDIA NUMBER(3,1),  CARGA_HORA NUMBER(2), 
+  FALTAS NUMBER(2), RESULTADO VARCHAR(10)
+);
+*/
+
+/*Inserir registros na tabela ALUNO deixando a coluna RESULTADO em branco.
+INSERT INTO ALUNO VALUES (100, ‘Luis’, ’Modelagem Dados',7.5,80,14,null);
+INSERT INTO ALUNO VALUES (200, ‘Carla’, ’Modelagem Dados',4.5,80,16,null);
+INSERT INTO ALUNO VALUES (300, ‘Pedro’, ’Modelagem Dados',6.0,80,24,null);*/
+*/
+
+/*DESAFIO  ::
+Criar um bloco PL/SQL para pesquisar um nº de RA fornecido em tempo de execução e, 
+encontrando o registro, atualizar o campo RESULTADO, 
+de acordo com as regras abaixo:
+
+
+
+Se o aluno obteve média igual ou maior que 7.0 e suas faltas não ultrapassarem 25% da carga horária da disciplina o resultado será: APROVADO.
+Se o aluno obteve média inferior a 7.0 e suas faltas não ultrapassarem 25% da carga horária da disciplina o resultado será: EXAME.
+
+Para os demais casos o resultado será: REPROVADO.*/
+
+SELECT COUNT(ra) qtd_ra FROM aluno WHERE RA ='1300'
+
+DECLARE 
+    v_ra ALUNO.RA%TYPE;
+    v_name ALUNO.NOME%TYPE;
+    v_average ALUNO.MEDIA%TYPE;
+    v_falts ALUNO.FALTAS%TYPE;
+    v_c_hours ALUNO.CARGA_HORA%TYPE;
+    v_qtd  NUMBER;
+BEGIN
+    v_ra:='& TYPE_OF_RA_NUMBER';
+    
+    select count(ra) into v_qtd from aluno where ra = v_ra;
+    SYS.DBMS_OUTPUT.PUT_LINE(v_qtd);
+    IF v_qtd > 0 THEN    
+        SELECT MEDIA, FALTAS, CARGA_HORA, NOME INTO v_average, v_falts, v_c_hours, v_name FROM ALUNO WHERE RA = v_ra;
+        SYS.DBMS_OUTPUT.PUT_LINE('Average: ' || v_average);
+        IF ( v_average >= 7.0 ) AND ( v_falts < (0.25 * v_c_hours) ) THEN
+            UPDATE ALUNO SET resultado = 'APROVADO' WHERE RA =  v_ra;
+            SYS.DBMS_OUTPUT.PUT_LINE('Student: '|| v_name);
+            IF ( v_average < 7.0 ) AND ( v_falts <= (0.25 * v_c_hours) ) THEN
+                UPDATE ALUNO SET resultado = 'EXAME' WHERE RA =  v_ra;
+                SYS.DBMS_OUTPUT.PUT_LINE('Student: '|| v_name);
+            END IF;
+        END IF;     
+    END IF;
+EXCEPTION        
+    WHEN INVALID_NUMBER THEN
+        SYS.DBMS_OUTPUT.PUT_LINE('there was an error during the conversion');
+    WHEN NO_DATA_FOUND THEN
+        SYS.DBMS_OUTPUT.PUT_LINE(v_ra || ' not found');
+END;
