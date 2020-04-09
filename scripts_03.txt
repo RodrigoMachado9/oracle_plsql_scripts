@@ -1,1 +1,111 @@
-#
+#  lista 03 
+
+
+
+----- INICIANDO EXERCICIOS DA LISTA 03 
+
+
+/*
+Criar um bloco PL/SQL para selecionar na tabela FORNECEDOR, 
+o código do fornecedor informado na tela.  Se o fornecedor existir,
+apresente seu código e nome, do contrário, apresente uma mensagem 
+‘Fornecedor não cadastrado’. Utilize para isso a estrutura EXCEPTION. */
+
+DECLARE 
+  v_cod_provider FORNECEDOR.N_FORNEC%TYPE;
+  v_name FORNECEDOR.NOME%TYPE;
+  
+BEGIN 
+   v_cod_provider:='& TYPE_THE_COD_PROVIDER';
+   SELECT N_FORNEC, NAME INTO v_has_cod, v_name  FROM fornecedor WHERE N_FORNEC = v_cod_provider;
+   IF v_has_cod = v_cod_provider THEN
+      SYS.DBMS_OUTPUT.PUT_LINE(' NOME' || v_name );
+      SYS.DBMS_OUTPUT.PUT_LINE(' CODIGO ' || v_cod_provider);
+   END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      SYS.DBMS_OUTPUT.PUT_LINE( ' FORNECEDOR NÃO INFORMADO ' );
+END;
+
+
+/*
+Fazer cálculo das parcelas da compra de um carro 
+de acordo com a condição de pagamento escolhida. As condições são:
+[1] Parcelas para aquisição em 6 pagamentos
+[2] Parcelas para aquisição em 12 pagamentos
+[3] Parcelas para aquisição em 18 pagamentos
+*/
+
+DECLARE 
+        v_purchase NUMBER;                      -- valor da compra
+        v_number_plots NUMBER;                 -- numero de parcelas que deseja pagar
+        v_balance FLOAT;
+        v_input FLOAT;
+BEGIN 
+       SYS.DBMS_OUTPUT.PUT_LINE(' calculate the installments of a car purchase');
+       v_purchase:='& TYPE_THE_PURCHASE_VALUE';
+       v_number_plots:='& TYPE_OF_NUMBER_PLOTS';    -- 6, 12, 18=
+       v_input:= (0.2 * v_purchase);
+       v_balance:= (v_purchase - v_input);
+   
+   IF v_number_plots = 6 THEN
+      v_balance:= (v_balance * 1.1);
+      IF v_number_plots = 12 THEN
+          v_balance:= (v_balance * 1.5);
+          IF v_number_plots = 18 THEN
+            v_balance:= (v_balance * 1.2);
+            END IF;
+      END IF;
+    END IF;
+  SYS.DBMS_OUTPUT.PUT_LINE(' PURCHASE ' || v_purchase );
+  SYS.DBMS_OUTPUT.PUT_LINE(' INPUT VALUE ' || v_input );
+  SYS.DBMS_OUTPUT.PUT_LINE(' NUMBER PLOATS ' || v_number_plots );
+  SYS.DBMS_OUTPUT.PUT_LINE(' VALUE PLOAT ' || v_balance );
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+          SYS.DBMS_OUTPUT.PUT_LINE( ' VALOR DA PARCELA NAO ENCONTRADA ' );
+END;
+          
+
+
+/*
+
+O IMC – Índice de Massa Corporal é um critério da Organização Mundial de Saúde 
+para dar uma indicação sobre a condição de peso de uma pessoa adulta. 
+( A fórmula é IMC = peso / (altura)2 )
+Elabore um bloco PL/SQL que leia o peso e a altura de um adulto em tempo de execução 
+e identifique em que condição ele se encontra, de acordo com a tabela abaixo.
+IMC em adultos	Condição
+< 18,5	Abaixo do peso
+>= 18,5 e < 25	Peso normal
+>= 25 e < 30	Acima do peso
+>= 30	Obeso
+No final, apresente seu peso, sua altura e sua condição.
+*/  
+
+
+DECLARE 
+      v_height NUMBER;
+      v_imc FLOAT;
+      v_weight NUMBER;
+      
+BEGIN
+    v_height:='& TYPE_OF_ALTURA';
+    v_weight:='& TYPE_OF_PESO';
+    
+    v_imc:= ( v_weight / (v_height * v_height));
+    IF v_imc < 18.5 THEN
+        SYS.DBMS_OUTPUT.PUT_LINE( '  weight: ' || v_weight || '  height: ' || v_height || '  condition: ' || 'abaixo do peso' );
+          -- SYS.DBMS_OUTPUT.PUT_LINE( 'abaixo do peso' );
+    ELSIF v_imc >= 18.5 AND v_imc < 25 THEN
+          SYS.DBMS_OUTPUT.PUT_LINE( ' weight: ' || v_weight || 'height: ' || v_height || 'condition: ' || 'peso normal' );
+          -- SYS.DBMS_OUTPUT.PUT_LINE( 'peso normal' );
+    ELSIF v_imc >= 25 AND v_imc  < 30 THEN
+         SYS.DBMS_OUTPUT.PUT_LINE( ' weight: ' || v_weight || 'height: ' || v_height || 'condition: ' || 'acima do peso' );
+         -- SYS.DBMS_OUTPUT.PUT_LINE( 'acima do peso' );
+    ELSIF v_imc > 30 THEN
+        SYS.DBMS_OUTPUT.PUT_LINE( ' weight: ' || v_weight || 'height: ' || v_height || 'condition: ' || 'obeso' );
+        -- SYS.DBMS_OUTPUT.PUT_LINE( 'obeso' );
+    END IF;
+    
+END;
