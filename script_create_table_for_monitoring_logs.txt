@@ -1,0 +1,40 @@
+-- construindo tabela de espço local;
+-- a instrução ira criar o arquivo de log, automaticamente;
+CREATE TABLESPACE tbs_errors_sql logging datafile 'C:\Users\rodri\Documents\plsql_data_logs\errors_sql.dbf.log' size 100M extent management local segment space management auto;
+
+--- criando tabela e associado a tablespace construida;
+  CREATE TABLE errors_sql
+    ( 
+      data DATE,
+      usuario VARCHAR2(30),
+      msg_error VARCHAR2(4000),
+      stmt_error VARCHAR2(4000)
+    )tablespace tbs_errors_sql;
+    
+-- construção da trigger que ficara pendura na tabela.
+
+create or replace trigger trg_capture_errors
+after servererror on database 
+declare
+    sql_text ora_name_list_t;
+    msg_error varchar2(4000):=null;
+    stmt_error varchar2(4000):=null;
+
+begin 
+    for depth in 1 .. ora_server_error_depth loop
+      msg_error := msg_error || ora_server_error_msg(depth);
+        end loop;
+    for i in 1 .. ora_sql_txt(sql_text) loop
+      stmt_error := stmt_error || sql_text(i);
+       end loop;
+    insert into errors_sql 
+      values(sysdate, ora_login_user, msg_error, stmt_error);
+end;
+    
+grant select on errors_sql to public;
+
+create public synonym errors_sql for system.errors_sql;
+
+/* teste de caputa erros sql */ 
+select 0/0
+select * from errors_sql 
