@@ -28,43 +28,58 @@ EXCEPTION
 END;
 
 
+
+### exercicio 13 ###
+
 /*
-Fazer cálculo das parcelas da compra de um carro 
+Fazer cálculo das parcelas da compra de um carro
 de acordo com a condição de pagamento escolhida. As condições são:
 [1] Parcelas para aquisição em 6 pagamentos
 [2] Parcelas para aquisição em 12 pagamentos
 [3] Parcelas para aquisição em 18 pagamentos
 */
-
-DECLARE 
-        v_purchase NUMBER;                      -- valor da compra
-        v_number_plots NUMBER;                 -- numero de parcelas que deseja pagar
-        v_balance FLOAT;
-        v_input FLOAT;
-BEGIN 
-       SYS.DBMS_OUTPUT.PUT_LINE(' calculate the installments of a car purchase');
-       v_purchase:='& TYPE_THE_PURCHASE_VALUE';
-       v_number_plots:='& TYPE_OF_NUMBER_PLOTS';    -- 6, 12, 18=
-       v_input:= (0.2 * v_purchase);
-       v_balance:= (v_purchase - v_input);
-   
-   IF v_number_plots = 6 THEN
-      v_balance:= (v_balance * 1.1);
-      IF v_number_plots = 12 THEN
-          v_balance:= (v_balance * 1.5);
-          IF v_number_plots = 18 THEN
-            v_balance:= (v_balance * 1.2);
-            END IF;
-      END IF;
-    END IF;
-  SYS.DBMS_OUTPUT.PUT_LINE(' PURCHASE ' || v_purchase );
-  SYS.DBMS_OUTPUT.PUT_LINE(' INPUT VALUE ' || v_input );
-  SYS.DBMS_OUTPUT.PUT_LINE(' NUMBER PLOATS ' || v_number_plots );
-  SYS.DBMS_OUTPUT.PUT_LINE(' VALUE PLOAT ' || v_balance );
+-- refactored code;
+DECLARE
+  v_purchase     NUMBER; -- valor da compra
+  v_number_plots NUMBER; -- numero de parcelas que deseja pagar
+  v_balance NUMBER;
+  v_input FLOAT;
+  v_response FLOAT;
+BEGIN
+  
+  v_purchase           :='& TYPE_THE_PURCHASE_VALUE';
+  v_number_plots       :='& TYPE_OF_NUMBER_PLOTS';    -- 6, 12, 18
+  v_input              := (0.2        * v_purchase);
+  v_balance            := (v_purchase - v_input);
+  
+  -- Quando nao for necessario o retorno, utilizar o case + end case e ( ; ) pós then.
+  v_response:=  
+  CASE
+    WHEN v_number_plots   = 6  THEN  (v_balance * 1.1)
+    WHEN v_number_plots   = 12 THEN  (v_balance * 1.5)
+    WHEN v_number_plots   = 18 THEN  (v_balance * 1.2)
+  ELSE 
+      0.0
+  END;
+  
+  CASE
+    WHEN v_response = 0.0 THEN 
+        SYS.DBMS_OUTPUT.PUT_LINE(' NUMERO DE PARCELA INVÁLIDA! ');
+        SYS.DBMS_OUTPUT.PUT_LINE(' parcelas válidas: 6, 12, 18 ');
+    ELSE
+        SYS.DBMS_OUTPUT.PUT_LINE(' calculated installment');
+        SYS.DBMS_OUTPUT.PUT_LINE(' PURCHASE ' || v_purchase );
+        SYS.DBMS_OUTPUT.PUT_LINE(' INPUT VALUE ' || v_input );
+        SYS.DBMS_OUTPUT.PUT_LINE(' NUMBER PLOATS ' || v_number_plots );
+        SYS.DBMS_OUTPUT.PUT_LINE(' VALUE PLOAT ' || v_response );      
+  END CASE;
+    
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-          SYS.DBMS_OUTPUT.PUT_LINE( ' VALOR DA PARCELA NAO ENCONTRADA ' );
+WHEN NO_DATA_FOUND THEN
+  SYS.DBMS_OUTPUT.PUT_LINE( ' VALOR DA PARCELA NAO ENCONTRADA ' );
 END;
+
+
           
 
 
