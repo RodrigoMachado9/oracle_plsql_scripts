@@ -1,0 +1,7 @@
+# exercicios 15 em diante
+
+
+ -- cria determinada sequence para coluna;
+create sequence s_ra increment by 1 start with 1
+
+
