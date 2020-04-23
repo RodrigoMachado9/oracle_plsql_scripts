@@ -2,6 +2,50 @@
 
 
  -- cria determinada sequence para coluna;
-create sequence s_ra increment by 1 start with 1
+create sequence s_num_titulo increment by 1 start with 1;
 
 
+
+DECLARE
+    v_codigo cliente.codigo%type :=&v_codigo;
+    v_venda cliente.venda%type;
+    v_parcela cliente.parcela%type;
+    v_data_system DATE := to_date(trunc(SYSDATE), 'DD/MM/YYYY');
+    v_titulo number;
+    
+    CURSOR table_client IS SELECT CODIGO , NOME , ENDERECO , ESTADO , CEP , VENDA , DT_NASC , PARCELA ,
+    STATUS , VALOR_NOTA , EMISSAO_NOTA  FROM cliente where codigo = v_codigo;
+
+BEGIN
+
+  FOR client in table_client
+    LOOP
+        CASE 
+          WHEN client.venda <= 6000.00 THEN 
+            FOR v_contador in 1..10 LOOP 
+              v_titulo := (client.venda/client.parcela);
+              INSERT INTO titulo(num_titulo, codigo, valor_titulo, valor_juros,  valor_desc, 
+              valor_pago, dt_emissao, dt_venc, dt_pagto) VALUES (s_titulo.NEXTVAL,
+              client.codigo, v_titulo, 0, 0, 0, v_data_system, v_data_system + 30, null);
+              END LOOP;
+          WHEN client.venda BETWEEN 6000.00 AND 7000.00 THEN
+          FOR v_contador in 1..15 LOOP
+              INSERT INTO titulo(num_titulo, codigo, valor_titulo, valor_juros,  valor_desc, 
+              valor_pago, dt_emissao, dt_venc, dt_pagto) VALUES (s_titulo.NEXTVAL,
+              client.codigo, v_titulo, 0, 0, 0, v_data_system, v_data_system + 30, null);
+              END LOOP;
+          WHEN client.venda > 7000.00 THEN
+          FOR v_contador in  1..20 LOOP
+              INSERT INTO titulo(num_titulo, codigo, valor_titulo, valor_juros,  valor_desc, 
+                valor_pago, dt_emissao, dt_venc, dt_pagto) VALUES (s_titulo.NEXTVAL,
+                client.codigo, v_titulo, 0, 0, 0, v_data_system, v_data_system + 30, null);
+              END LOOP;
+          END CASE;
+    END LOOP;
+
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN 
+    SYS.DBMS_OUTPUT.PUT_LINE('codigo: ' || v_codigo || ' nao encontrado');
+      
+END;
