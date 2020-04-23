@@ -40,15 +40,15 @@ de acordo com a condição de pagamento escolhida. As condições são:
 */
 -- refactored code;
 DECLARE
-  v_purchase     NUMBER; -- valor da compra
-  v_number_plots NUMBER; -- numero de parcelas que deseja pagar
+  v_purchase     NUMBER := &v_purchase; -- valor da compra
+  v_number_plots NUMBER := &v_number_plots; -- numero de parcelas que deseja pagar
   v_balance NUMBER;
   v_input FLOAT;
   v_response FLOAT;
 BEGIN
   
-  v_purchase           :='& TYPE_THE_PURCHASE_VALUE';
-  v_number_plots       :='& TYPE_OF_NUMBER_PLOTS';    -- 6, 12, 18
+  --v_purchase           :='& TYPE_THE_PURCHASE_VALUE';
+  --v_number_plots       :='& TYPE_OF_NUMBER_PLOTS';    -- 6, 12, 18
   v_input              := (0.2        * v_purchase);
   v_balance            := (v_purchase - v_input);
   
