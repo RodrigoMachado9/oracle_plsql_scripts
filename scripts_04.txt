@@ -91,3 +91,46 @@ EXCEPTION
     SYS.DBMS_OUTPUT.PUT_LINE('codigo: ' || v_codigo || ' nao encontrado');
       
 END;
+
+
+
+# exercicio 16 em diante
+
+
+DECLARE 
+    v_account_number lanc.n_conta%TYPE;
+    v_current_date DATE := to_date(trunc(SYSDATE), 'DD/MM/YYYY');
+    v_historic  lanc.historico%TYPE;
+    v_lauch v_historic%TYPE;
+    v_option VARCHAR(10);
+    v_option_is_null EXCEPTION;
+    v_options EXCEPTION;
+    
+    CURSOR table_lauch IS SELECT N_CONTA, HISTORICO FROM lanc;
+  
+BEGIN 
+    v_option :='& number_option';
+    CASE
+      WHEN v_option IS NOT NULL THEN 
+            CASE 
+                  WHEN v_option = 0 THEN sys.dbms_output.put_line('zero');
+                  WHEN v_option = 1 THEN sys.dbms_output.put_line('one');
+            ELSE 
+                RAISE v_options;
+            END CASE;
+      ELSE
+          RAISE v_option_is_null;
+    END CASE;
+    
+EXCEPTION
+
+  WHEN v_option_is_null THEN
+    sys.dbms_output.put_line('variable does not accept empty');
+  
+  WHEN v_options THEN 
+    sys.dbms_output.put_line('0 to 100,00 or 1 to 180,00');
+    
+END;
+
+
+
