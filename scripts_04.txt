@@ -100,11 +100,13 @@ END;
 DECLARE 
     v_account_number lanc.n_conta%TYPE;
     v_current_date DATE := to_date(trunc(SYSDATE), 'DD/MM/YYYY');
-    v_historic  lanc.historico%TYPE;
-    v_lauch v_historic%TYPE;
     v_option VARCHAR(10);
+    v_increment_number  NUMBER;
+    v_contador v_increment_number%TYPE;
+    -- zone this control exceptions -- 
     v_option_is_null EXCEPTION;
     v_options EXCEPTION;
+    ----------------------------------
     
     CURSOR table_lauch IS SELECT N_CONTA, HISTORICO FROM lanc;
   
@@ -113,24 +115,35 @@ BEGIN
     CASE
       WHEN v_option IS NOT NULL THEN 
             CASE 
-                  WHEN v_option = 0 THEN sys.dbms_output.put_line('zero');
-                  WHEN v_option = 1 THEN sys.dbms_output.put_line('one');
+                  WHEN v_option = 0 THEN 
+                  v_contador:=0;
+                    v_increment_number:=120;
+                    FOR var IN  1..10 LOOP
+                      SYS.DBMS_OUTPUT.PUT_LINE(v_increment_number);
+                      INSERT INTO lanc(N_LANC, DT_LANC, N_CONTA, VALOR, HISTORICO) VALUES(v_increment_number, v_current_date, 4, 100, 'crédito de cesta básica');
+                      v_increment_number:=v_increment_number + 1;
+                      v_contador:= v_contador+1;
+                    END LOOP;
+                    -- apresentar a quantidade de lançamentos inclusos....
+                  WHEN v_option = 1 THEN
+                  v_contador:= 0;
+                  v_increment_number:=150;
+                  FOR var IN  1..10 LOOP
+                      SYS.DBMS_OUTPUT.PUT_LINE(v_increment_number);
+                      INSERT INTO lanc(N_LANC, DT_LANC, N_CONTA, VALOR, HISTORICO) VALUES(v_increment_number, v_current_date, 2, 180, 'depósito em conta corrente');
+                      v_increment_number:=v_increment_number + 1;
+                      v_contador:= v_contador+1;
+                    END LOOP; 
             ELSE 
                 RAISE v_options;
             END CASE;
       ELSE
           RAISE v_option_is_null;
     END CASE;
-    
+    SYS.DBMS_OUTPUT.PUT_LINE('the number of lauches is equal to!  ' ||  v_increment_number);
 EXCEPTION
-
   WHEN v_option_is_null THEN
     sys.dbms_output.put_line('variable does not accept empty');
-  
   WHEN v_options THEN 
     sys.dbms_output.put_line('0 to 100,00 or 1 to 180,00');
-    
 END;
-
-
-
