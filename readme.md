@@ -14,7 +14,6 @@
 	# fonte: https://www.oracle.com/technetwork/pt/articles/sql/capturando-erros-dml-ddl-2098428-ptb.html
 
 
-
 # settings init
 
 SET SERVEROUTPUT ON
