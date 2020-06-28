@@ -5,9 +5,9 @@
 		# https://www.oracle.com/technetwork/pt/articles/sql/capturando-erros-dml-ddl-2098428-ptb.html
 
 # command utils 
-	# fomatar estrutura plsql 
+	# format structure plsql 
 		* ctrl + f7
-	# limpa trace
+	# clean trace
 		* ctrl +  shift + D
 
 
