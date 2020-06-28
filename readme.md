@@ -11,9 +11,6 @@
 		* ctrl +  shift + D
 
 
-
-
-
 # settings init
 
 SET SERVEROUTPUT ON
