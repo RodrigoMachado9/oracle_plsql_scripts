@@ -1,4 +1,4 @@
-# reference
+# references
 	# https://www.techonthenet.com/oracle/loops/cursor_for.php
 	
 	#  write log messages with :::   sys.dbms_output ( oracle plsq )
